@@ -36,49 +36,101 @@ class _QuizScreenState extends State<QuizScreen> {
     if (index < words.length - 1) {
       setState(() => index++);
     } else {
-      showDialog(
-        context: context,
-        builder:
-            (_) => AlertDialog(
-              title: const Text('Kết thúc bài kiểm tra'),
-              content: Text(
-                'Đúng: $correct | Sai: $incorrect\nTỉ lệ đúng: ${((correct / (correct + incorrect)) * 100).toStringAsFixed(1)}%',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
-      );
+      _showResultDialog();
     }
+  }
+
+  void _showResultDialog() {
+    final total = correct + incorrect;
+    final percentage =
+        (total > 0) ? (correct / total * 100).toStringAsFixed(1) : '0';
+
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: const Text('Kết quả bài kiểm tra'),
+            content: Text(
+              '✅ Số câu đúng: $correct\n'
+              '❌ Số câu sai: $incorrect\n'
+              '📊 Tỉ lệ đúng: $percentage%',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     if (words.isEmpty) {
       return const Scaffold(
-        body: Center(child: Text('Không có dữ liệu kiểm tra.')),
+        body: Center(
+          child: Text(
+            'Không có dữ liệu kiểm tra.',
+            style: TextStyle(fontSize: 18, color: Colors.grey),
+          ),
+        ),
       );
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('Trắc nghiệm Đúng / Sai')),
+      appBar: AppBar(
+        title: const Text('Trắc nghiệm Đúng / Sai'),
+        backgroundColor: Colors.teal,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(words[index].word, style: const TextStyle(fontSize: 24)),
-            const SizedBox(height: 16),
-            Text('Đáp án: ${words[index].meaning}'),
-            const SizedBox(height: 16),
+            Text(
+              'Từ: ${words[index].word}',
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Đáp án: ${words[index].meaning}',
+              style: const TextStyle(fontSize: 18, color: Colors.grey),
+            ),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () => _answer(words[index].meaning.toLowerCase()),
-              child: const Text('Đúng'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: const Text(
+                'Đúng',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
+            const SizedBox(height: 15),
             ElevatedButton(
               onPressed: () => _answer('sai'),
-              child: const Text('Sai'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: const Text(
+                'Sai',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),

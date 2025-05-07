@@ -53,28 +53,62 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   Widget build(BuildContext context) {
     if (words.isEmpty) {
-      return const Scaffold(body: Center(child: Text('Không có từ vựng.')));
+      return const Scaffold(
+        body: Center(
+          child: Text(
+            'Không có từ vựng.',
+            style: TextStyle(fontSize: 18, color: Colors.grey),
+          ),
+        ),
+      );
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('Ôn tập từ mới')),
+      appBar: AppBar(
+        title: const Text('Ôn tập từ mới'),
+        backgroundColor: Colors.teal,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('✅ $correct từ    ❌ $incorrect từ'),
-            const SizedBox(height: 16),
+            Text(
+              '✅ Đúng: $correct    ❌ Sai: $incorrect',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
             Text(
               words[currentIndex].word,
-              style: const TextStyle(fontSize: 24),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 20),
             TextField(
               controller: answerController,
               decoration: const InputDecoration(
                 labelText: 'Nhập nghĩa tiếng Việt',
+                border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(onPressed: _checkAnswer, child: const Text('Check')),
+            const SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: _checkAnswer,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text(
+                  'Check',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
           ],
         ),
       ),
